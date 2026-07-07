@@ -10,10 +10,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy your requirements file first to leverage Docker layer caching
-COPY requirements.txt .
+COPY Requirements.txt .
 
 # Install your Python libraries
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r Requirements.txt
 
 # Copy all your Python files into the container
 COPY . .
