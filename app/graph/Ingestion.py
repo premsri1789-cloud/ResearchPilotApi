@@ -3,7 +3,7 @@ import re
 import base64
 from dotenv import load_dotenv
 import pymupdf4llm
-from fastembed import TextEmbedding
+from langchain_openai import OpenAIEmbeddings 
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
@@ -22,8 +22,7 @@ vision_llm = ChatGroq(model=VISION_MODEL, temperature=0)
 
 
 #embedding model
-embedding_model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
-
+embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
 def setup_collection(COLLECTIONNAME: str) -> None :
     """Creates qdrant db if doesnot exist"""
@@ -110,7 +109,7 @@ def ingest_pipeline(file_path: str, session_id: str, user_id: str, COLLECTIONNAM
                 content_to_embed += f"\n\n[AI Visual Summary for {img_path}]: {visual_summary}"
 
         # Generate embedding for the combined text + visual summary
-        embedding = list(embedding_model.embed([content_to_embed]))[0].tolist()
+        embedding = embedding_model.embed_query(content_to_embed)
 
         # Package the payload
         points.append(

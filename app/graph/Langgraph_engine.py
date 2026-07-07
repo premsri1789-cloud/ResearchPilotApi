@@ -11,7 +11,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, START, END
 from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
-from fastembed import TextEmbedding
+from langchain_openai import OpenAIEmbeddings
 from tavily import TavilyClient
 
 APP_ROOT = Path(__file__).resolve().parent.parent
@@ -32,7 +32,7 @@ llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
 
 
 tavily = TavilyClient(api_key=tavily_key)
-embedding_model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
+embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
 def query_rewriter_node(state: AgentState) -> dict:
     """Uses chat history to rewrite the user query so it can be searched accurately."""
@@ -76,7 +76,7 @@ def retrieve_node(state: AgentState) -> dict:
     user_id = state["user_id"] # Get user_id from state
 
     # Embed question
-    query_vector = list(embedding_model.embed([search_query]))[0].tolist()
+    query_vector = embedding_model.embed_query(search_query)
 
     # Query Qdrant with metadata filtering
     response = qdrant_client.query_points(
