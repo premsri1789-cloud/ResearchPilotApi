@@ -129,12 +129,11 @@ def ingest_pipeline(file_path: str, session_id: str, user_id: str, COLLECTIONNAM
                 vector=embedding,
                 payload={
                     "session_id": session_id,
-                    "user_id": user_id,  # CRITICAL: Attach user_id to the vector
-                    "text": chunk.page_content, 
-                    "section": chunk.metadata.get("Header 1", "General") 
+                    "text": chunk.page_content,
+                    "section": chunk.metadata.get("Header 1", "General")
                 }
             )
-        )
+    )
 
     # Upsert into Qdrant
     if points:

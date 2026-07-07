@@ -82,16 +82,13 @@ def retrieve_node(state: AgentState) -> dict:
 
     # Query Qdrant with metadata filtering
     response = qdrant_client.query_points(
-            collection_name="Research_documents",
-            query=query_vector,
-            query_filter=Filter(
-                must=[
-                    FieldCondition(key="user_id", match=MatchValue(value=user_id)),
-                    FieldCondition(key="session_id", match=MatchValue(value=session_id))
-                ]
-            ),
-            limit=3
-        )
+        collection_name="Research_documents",
+        query=query_vector,
+        query_filter=Filter(
+            must=[FieldCondition(key="session_id", match=MatchValue(value=session_id))]
+        ),
+        limit=3
+    )
 
     results = response.points
 
