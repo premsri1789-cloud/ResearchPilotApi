@@ -3,17 +3,11 @@ langchain-core
 langchain-groq
 tavily-python
 langchain-community
-unstructured[all-docs]
-unstructured-inference
-pypdf
 python-dotenv
 qdrant-client
 pymupdf4llm 
 langchain-text-splitters
-poppler-utils
 fastapi 
 uvicorn 
-python-multipart 
 pydantic
 langchain-openai
-openai

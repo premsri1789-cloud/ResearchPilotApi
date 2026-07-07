@@ -7,7 +7,6 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
-from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 
 from app.core.vector_db import qdrant_client
@@ -29,7 +28,7 @@ def setup_collection(COLLECTIONNAME: str) -> None :
     if not qdrant_client.collection_exists(COLLECTIONNAME):
         qdrant_client.create_collection(
             collection_name=COLLECTIONNAME,
-            vectors_config=VectorParams(size=384, distance=Distance.COSINE)
+            vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
         )
         print(f'Collection {COLLECTIONNAME} created')
 

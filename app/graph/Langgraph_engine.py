@@ -2,14 +2,12 @@ import os
 import sys
 import json
 from pathlib import Path
-from typing import List, Literal
-from typing_extensions import TypedDict
+from typing import Literal
 from dotenv import load_dotenv
 
 from langchain_groq import ChatGroq
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END
-from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 from langchain_openai import OpenAIEmbeddings
 from tavily import TavilyClient
