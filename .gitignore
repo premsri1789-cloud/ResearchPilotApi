@@ -1,0 +1,5 @@
+.env
+__pycache__/
+temp_uploads/
+local_quadrant_db/
+extracted_media/
