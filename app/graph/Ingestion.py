@@ -27,14 +27,22 @@ embedding_model = GoogleGenerativeAIEmbeddings(
     output_dimensionality=1536
 )
 
-def setup_collection(COLLECTIONNAME: str) -> None :
-    """Creates qdrant db if doesnot exist"""
+def setup_collection(COLLECTIONNAME: str) -> None:
+    # IF you have access to Qdrant Cloud dashboard, just delete the collection there manually.
+    # OR, update your setup_collection to handle re-creation:
+    if qdrant_client.collection_exists(COLLECTIONNAME):
+        info = qdrant_client.get_collection(COLLECTIONNAME)
+        if info.config.params.vectors.size != 1536:
+            print("Dimension mismatch! Deleting old collection...")
+            qdrant_client.delete_collection(COLLECTIONNAME)
+            
+    # Now create it with the correct 1536 dimension
     if not qdrant_client.collection_exists(COLLECTIONNAME):
         qdrant_client.create_collection(
             collection_name=COLLECTIONNAME,
-            vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
+            vectors_config=VectorParams(size=1536, distance=Distance.COSINE) # 1536 for Gemini
         )
-        print(f'Collection {COLLECTIONNAME} created')
+        print(f'Collection {COLLECTIONNAME} created with 1536 dimensions')
 
 def encode_image(image_path: str) -> str:
     """Encodes an image to base64 string for the Vision Model."""
