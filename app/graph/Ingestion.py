@@ -3,7 +3,7 @@ import re
 import base64
 from dotenv import load_dotenv
 import pymupdf4llm
-from langchain_openai import OpenAIEmbeddings 
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
@@ -21,7 +21,11 @@ vision_llm = ChatGroq(model=VISION_MODEL, temperature=0)
 
 
 #embedding model
-embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
+embedding_model = GoogleGenerativeAIEmbeddings(
+    model="models/gemini-embedding-001",
+    google_api_key=os.getenv("GOOGLE_API_KEY"),
+    output_dimensionality=1536
+)
 
 def setup_collection(COLLECTIONNAME: str) -> None :
     """Creates qdrant db if doesnot exist"""

@@ -9,7 +9,7 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END
 from qdrant_client.models import Filter, FieldCondition, MatchValue
-from langchain_openai import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from tavily import TavilyClient
 
 APP_ROOT = Path(__file__).resolve().parent.parent
@@ -30,7 +30,11 @@ llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
 
 
 tavily = TavilyClient(api_key=tavily_key)
-embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
+embedding_model = GoogleGenerativeAIEmbeddings(
+    model="models/gemini-embedding-001",
+    google_api_key=os.getenv("GOOGLE_API_KEY"),
+    output_dimensionality=1536
+)
 
 def query_rewriter_node(state: AgentState) -> dict:
     """Uses chat history to rewrite the user query so it can be searched accurately."""

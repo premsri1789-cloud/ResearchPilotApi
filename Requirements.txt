@@ -10,5 +10,5 @@ langchain-text-splitters
 fastapi 
 uvicorn 
 pydantic
-langchain-openai
+langchain-google-genai
 python-multipart
