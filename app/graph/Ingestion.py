@@ -7,7 +7,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, VectorParams, PointStruct, PayloadSchemaType
 
 from app.core.vector_db import qdrant_client
 
@@ -36,13 +36,26 @@ def setup_collection(COLLECTIONNAME: str) -> None:
             print("Dimension mismatch! Deleting old collection...")
             qdrant_client.delete_collection(COLLECTIONNAME)
             
-    # Now create it with the correct 1536 dimension
+    # Now create it with the correct 1536 dimension AND create indexes
     if not qdrant_client.collection_exists(COLLECTIONNAME):
         qdrant_client.create_collection(
             collection_name=COLLECTIONNAME,
             vectors_config=VectorParams(size=1536, distance=Distance.COSINE) # 1536 for Gemini
         )
         print(f'Collection {COLLECTIONNAME} created with 1536 dimensions')
+        
+        # CRITICAL: Create indexes for filtering immediately after collection creation
+        qdrant_client.create_payload_index(
+            collection_name=COLLECTIONNAME,
+            field_name="user_id",
+            field_schema=PayloadSchemaType.KEYWORD,
+        )
+        qdrant_client.create_payload_index(
+            collection_name=COLLECTIONNAME,
+            field_name="session_id",
+            field_schema=PayloadSchemaType.KEYWORD,
+        )
+        print("Indexes created for user_id and session_id")
 
 def encode_image(image_path: str) -> str:
     """Encodes an image to base64 string for the Vision Model."""

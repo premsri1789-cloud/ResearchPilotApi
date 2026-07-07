@@ -85,7 +85,10 @@ def retrieve_node(state: AgentState) -> dict:
         collection_name="Research_documents",
         query=query_vector,
         query_filter=Filter(
-            must=[FieldCondition(key="session_id", match=MatchValue(value=session_id))]
+            must=[
+                FieldCondition(key="session_id", match=MatchValue(value=session_id)),
+                FieldCondition(key="user_id", match=MatchValue(value=user_id)) # CRITICAL: Added user_id filter
+            ]
         ),
         limit=3
     )
