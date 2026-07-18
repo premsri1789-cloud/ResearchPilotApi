@@ -8,5 +8,5 @@ class AgentState(TypedDict):
     documents: List[str]
     web_results: List[str]
     generation: str
-    chat_history: List[dict]    # Incoming history from SQLite
-    rewritten_query: str        # The contextually resolved question
+    chat_history: List[dict]
+    rewritten_query: str
