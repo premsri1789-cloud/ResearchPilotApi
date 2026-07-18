@@ -190,6 +190,3 @@ The container exposes port `8080` and is compatible with Google Cloud Run out of
 
 ---
 
-## 📄 License
-
-MIT
